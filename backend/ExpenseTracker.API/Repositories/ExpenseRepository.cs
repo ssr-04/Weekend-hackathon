@@ -6,6 +6,8 @@ using ExpenseTracker.API.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using ExpenseTracker.API.DTOs.Common;
+using System.Globalization;
+using ExpenseTracker.API.DTOs.Dashboard;
 
 namespace ExpenseTracker.API.Repositories
 {
@@ -67,13 +69,13 @@ namespace ExpenseTracker.API.Repositories
             if (!string.IsNullOrWhiteSpace(filterParams.SearchTerm))
             {
                 var searchTermLower = filterParams.SearchTerm.ToLower();
-                
-                query = query.Where(e => 
-                    e.Title.ToLower().Contains(searchTermLower) || 
+
+                query = query.Where(e =>
+                    e.Title.ToLower().Contains(searchTermLower) ||
                     (e.Description != null && e.Description.ToLower().Contains(searchTermLower))
                 );
             }
-            
+
             if (!string.IsNullOrWhiteSpace(filterParams.PaymentMethod))
             {
                 var searchTermLower = filterParams.PaymentMethod.ToLower();
@@ -82,22 +84,22 @@ namespace ExpenseTracker.API.Repositories
                 );
             }
 
-            
+
             var isDescending = filterParams.SortOrder?.ToLower() == "desc";
-            
+
             // Default sort order
             IOrderedQueryable<Expense> orderedQuery;
 
             switch (filterParams.SortBy?.ToLower())
             {
                 case "date":
-                    orderedQuery = isDescending 
-                        ? query.OrderByDescending(e => e.Date) 
+                    orderedQuery = isDescending
+                        ? query.OrderByDescending(e => e.Date)
                         : query.OrderBy(e => e.Date);
                     break;
                 case "amount":
-                    orderedQuery = isDescending 
-                        ? query.OrderByDescending(e => e.Amount) 
+                    orderedQuery = isDescending
+                        ? query.OrderByDescending(e => e.Amount)
                         : query.OrderBy(e => e.Amount);
                     break;
                 case "title":
@@ -122,7 +124,7 @@ namespace ExpenseTracker.API.Repositories
                 .Where(e => e.UserId == userId && !e.IsDeleted && e.Date >= startDate && e.Date <= endDate)
                 .SumAsync(e => e.Amount);
         }
-        
+
         public async Task<IEnumerable<CategoryExpense>> GetExpenseBreakdownByCategoryAsync(Guid userId, DateTimeOffset startDate, DateTimeOffset endDate)
         {
             return await _dbSet
@@ -146,5 +148,72 @@ namespace ExpenseTracker.API.Repositories
                 .Include(e => e.Category) // Include category for context
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<DailySpendingItemDto>> GetDailySpendingForPeriodAsync(Guid userId, DateTimeOffset startDate, DateTimeOffset endDate)
+        {
+            return await _dbSet
+                .Where(e => e.UserId == userId && !e.IsDeleted && e.Date >= startDate && e.Date <= endDate)
+                .GroupBy(e => e.Date.Date) // Group by the calendar date, stripping the time part
+                .Select(g => new DailySpendingItemDto
+                {
+                    Date = new DateTimeOffset(g.Key, TimeSpan.Zero), // Ensure it's treated as a full DateTimeOffset
+                    TotalAmount = g.Sum(e => e.Amount)
+                })
+                .OrderBy(ds => ds.Date)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<SpendingTrendItemDto>> GetSpendingTrendAsync(
+            Guid userId,
+            DateTimeOffset startDate,
+            DateTimeOffset endDate,
+            string groupBy)
+        {
+            var query = _dbSet.Where(e => e.UserId == userId && !e.IsDeleted && e.Date >= startDate && e.Date <= endDate);
+
+            switch (groupBy.ToLower())
+            {
+                case "quarter":
+                    {
+                        var data = await query
+                            .GroupBy(e => new { e.Date.Year, Quarter = (e.Date.Month - 1) / 3 + 1 })
+                            .Select(g => new { g.Key.Year, g.Key.Quarter, TotalAmount = g.Sum(e => e.Amount) })
+                            .OrderBy(r => r.Year).ThenBy(r => r.Quarter)
+                            .ToListAsync();
+
+                        return data.Select(r => new SpendingTrendItemDto
+                        {
+                            PeriodLabel = $"Q{r.Quarter} {r.Year}",
+                            TotalAmount = r.TotalAmount
+                        });
+                    }
+
+                case "month":
+                default:
+                    {
+                        var data = await query
+                            .GroupBy(e => new { e.Date.Year, e.Date.Month })
+                            .Select(g => new { g.Key.Year, g.Key.Month, TotalAmount = g.Sum(e => e.Amount) })
+                            .OrderBy(r => r.Year).ThenBy(r => r.Month)
+                            .ToListAsync();
+
+                        return data.Select(r => new SpendingTrendItemDto
+                        {
+                            PeriodLabel = new DateTime(r.Year, r.Month, 1).ToString("MMM yyyy", CultureInfo.InvariantCulture),
+                            TotalAmount = r.TotalAmount
+                        });
+                    }
+            }
+        }
+        
+        public async Task<IEnumerable<Expense>> GetExpensesForPeriodAsync(Guid userId, DateTimeOffset startDate, DateTimeOffset endDate)
+        {
+            return await _dbSet
+                .Where(e => e.UserId == userId && !e.IsDeleted && e.Date >= startDate && e.Date <= endDate)
+                .ToListAsync(); // This executes the query and brings the results into memory.
+        }
+
+
+
     }
 }

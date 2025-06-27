@@ -1,6 +1,7 @@
 using ExpenseTracker.API.DTOs.Common;
 using ExpenseTracker.API.DTOs.Expenses;
 using ExpenseTracker.API.Helpers;
+using ExpenseTracker.API.Models;
 
 namespace ExpenseTracker.API.Interfaces.Services
 {
@@ -11,5 +12,6 @@ namespace ExpenseTracker.API.Interfaces.Services
         Task<Result<ExpenseResponseDto>> CreateExpenseAsync(Guid userId, ExpenseCreateRequestDto createDto);
         Task<Result<ExpenseResponseDto>> UpdateExpenseAsync(Guid expenseId, Guid userId, ExpenseUpdateRequestDto updateDto);
         Task<Result> DeleteExpenseAsync(Guid expenseId, Guid userId);
+
     }
 }

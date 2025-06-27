@@ -57,11 +57,11 @@ namespace ExpenseTracker.API.Controllers
         {
             var userId = GetCurrentUserId();
             var result = await _expenseService.UpdateExpenseAsync(id, userId, updateDto);
-            
+
             if (!result.IsSuccess)
             {
                 // Can be 404 (not found) or 400 (bad category, bad date)
-                if(result.Error!.Contains("not found"))
+                if (result.Error!.Contains("not found"))
                     return NotFound(new { message = result.Error });
 
                 return BadRequest(new { message = result.Error });
@@ -82,6 +82,28 @@ namespace ExpenseTracker.API.Controllers
             }
 
             return NoContent();
+        }
+        
+        [HttpGet("today")]
+        public async Task<IActionResult> GetTodaysExpenses()
+        {
+            var userId = GetCurrentUserId();
+            var now = DateTimeOffset.UtcNow;
+            var startDate = new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, now.Offset).ToLocalTime();
+            var endDate = startDate.AddDays(1).AddTicks(-1);
+
+            var filterParams = new DTOs.Common.ExpenseFilterRequestDto
+            {
+                StartDate = startDate.ToString(),
+                EndDate = endDate.ToString(),
+                PageNumber = 1,
+                PageSize = 100 // A reasonable max for a single day's expenses
+            };
+
+            var result = await _expenseService.GetUserExpensesAsync(userId, filterParams);
+            
+            // We only want the list of items, not the pagination data for this specific endpoint
+            return Ok(result.Value?.Items);
         }
     }
 }

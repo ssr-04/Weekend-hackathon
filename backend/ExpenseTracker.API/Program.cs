@@ -70,6 +70,7 @@ try
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
+    builder.Services.AddScoped<IDashboardService, DashboardService>(); 
 
     // AutoMapper config
     builder.Services.AddAutoMapper(typeof(Program).Assembly);
