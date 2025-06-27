@@ -16,6 +16,9 @@ namespace ExpenseTracker.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
+        [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register(RegisterRequestDto registerDto)
         {
             var result = await _authService.RegisterAsync(registerDto);
@@ -24,7 +27,7 @@ namespace ExpenseTracker.API.Controllers
                 // Using Conflict (409) for existing user, otherwise BadRequest (400)
                 if (result.Error!.Contains("exists"))
                     return Conflict(new { message = result.Error });
-                
+
                 return BadRequest(new { message = result.Error });
             }
 
@@ -33,6 +36,8 @@ namespace ExpenseTracker.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
+        [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login(LoginRequestDto loginDto)
         {
             var result = await _authService.LoginAsync(loginDto);
@@ -46,6 +51,8 @@ namespace ExpenseTracker.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("refresh-token")]
+        [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto requestDto)
         {
             var result = await _authService.RefreshTokenAsync(requestDto.RefreshToken);
@@ -58,10 +65,12 @@ namespace ExpenseTracker.API.Controllers
         }
 
         [HttpPost("logout")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Logout(RefreshTokenRequestDto requestDto)
         {
             var result = await _authService.LogoutAsync(requestDto.RefreshToken);
-            
+
             return NoContent();
         }
     }

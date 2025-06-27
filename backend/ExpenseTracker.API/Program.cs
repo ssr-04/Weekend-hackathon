@@ -70,7 +70,17 @@ try
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<ICategoryService, CategoryService>();
     builder.Services.AddScoped<IExpenseService, ExpenseService>();
-    builder.Services.AddScoped<IDashboardService, DashboardService>(); 
+    builder.Services.AddScoped<IDashboardService, DashboardService>();
+    builder.Services.AddScoped<IAIService, AIService>(); 
+
+    // AI service
+    builder.Services.AddHttpClient("AIServiceClient", client =>
+    {
+        // The base address of Python Flask API
+        client.BaseAddress = new Uri(builder.Configuration["AIService:BaseUrl"] ?? "http://localhost:8000/");
+        client.Timeout = TimeSpan.FromSeconds(30); // Setting a reasonable timeout
+    });
+
 
     // AutoMapper config
     builder.Services.AddAutoMapper(typeof(Program).Assembly);

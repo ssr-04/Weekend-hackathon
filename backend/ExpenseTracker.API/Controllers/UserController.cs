@@ -18,11 +18,14 @@ namespace ExpenseTracker.API.Controllers
         }
 
         [HttpGet("profile")]
+        [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetProfile()
         {
             var userId = GetCurrentUserId();
             var result = await _userService.GetUserProfileAsync(userId);
-            
+
             // This endpoint should always find the user if they are authenticated
             if (!result.IsSuccess)
             {
@@ -33,6 +36,9 @@ namespace ExpenseTracker.API.Controllers
         }
 
         [HttpPut("profile")]
+        [ProducesResponseType(typeof(UserProfileDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateProfile(UpdateUserProfileRequestDto updateDto)
         {
             var userId = GetCurrentUserId();
@@ -50,6 +56,9 @@ namespace ExpenseTracker.API.Controllers
         // is so tightly coupled with authentication (hashing, credential checking) that it's
         // better kept in the AuthService. We need to add the method there.
         [HttpPut("change-password")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto changePasswordDto)
         {
             var userId = GetCurrentUserId();

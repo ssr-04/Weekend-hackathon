@@ -15,16 +15,21 @@ namespace ExpenseTracker.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<CategoryResponseDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetUserCategories()
         {
             var userId = GetCurrentUserId();
             var result = await _categoryService.GetUserCategoriesAsync(userId);
-            
+
             // This endpoint should always succeed for an authenticated user
             return Ok(result.Value);
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CreateCategory(CategoryCreateRequestDto createDto)
         {
             var userId = GetCurrentUserId();
@@ -41,6 +46,9 @@ namespace ExpenseTracker.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(CategoryResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> UpdateCategory(Guid id, CategoryUpdateRequestDto updateDto)
         {
             var userId = GetCurrentUserId();
@@ -57,6 +65,10 @@ namespace ExpenseTracker.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
             var userId = GetCurrentUserId();
