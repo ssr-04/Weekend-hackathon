@@ -1,0 +1,147 @@
+# Visual Studio
+.vs/
+*.sln.opt
+*.suo
+*.user
+*.userprefs
+*.VC.db
+*.opendb
+*.tlog
+*.log
+
+# Build Results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+[Aa]rguments/
+*.pdb
+*.tmp
+*.csproj.user
+*.vcxproj.user
+*.vcxproj.filters
+*.ncb
+*.aps
+*.res
+*.pch
+*.idb
+*.sbr
+*_i.c
+*_p.c
+*.ilk
+*.aps
+*.obj
+*.o
+*.out
+*.exe
+*.dll
+*.com
+*.lib
+*.nupkg
+*.zip
+*.tar
+*.gz
+*.orig
+*.swp
+*.bak
+*.scc
+*.vspscc
+*.vssscc
+*.pbxuser
+*.mode1v3
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+*.xcdatamodeld
+*.xcscmplaceholder
+*.DS_Store
+*.stackdump
+*.manifest
+*.webinfo
+*.pfx
+*.snk
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ASP.NET Core
+/bin/
+/obj/
+*.dbmdl
+.vs/
+.vscode/
+artifacts/
+publish/
+[Rr]esources/
+_ReSharper*/
+*.dotsettings
+*.user
+*.bak
+*.suo
+*.web
+*.json.user
+*.ruleset
+
+# Azure WebJobs
+app_data/
+diagnostics/
+
+# Certificates
+*.p12
+*.cer
+*.crt
+*.pem
+
+# Packages
+packages/
+
+# Project files
+*.csproj.DotSettings
+*.user
+*.suo
+*.vspscc
+*.vssscc
+*.DotSettings
+*.vs
+project.lock.json
+
+# Local files
+*.local
+*.DS_Store
+*.env
+.env.development
+.env.production
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker
+DockerFile.develop
+.dockerignore
+
+# Test Results
+TestResults/
+*.trx
+*.coverage
+*.vsp
+*.coveragexml
+
+# Rider
+.idea/
+.Rider/
+
+# MacOS
+.DS_Store
+
+# ReSharper
+_ReSharper.*/
+*.resharper
+
+# Nbgv (Nerdbank.GitVersioning)
+.nbgv_cache
+
+# VSTS Test
+.test/
