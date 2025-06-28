@@ -1,0 +1,182 @@
+/*
+  =======================================================
+  AETHER EXPENSE TRACKER - GLOBAL STYLES (v2)
+  =======================================================
+  This version uses the superior radial-gradient background from our
+  previous project, adapted with the new "Aether" color palette.
+*/
+
+@import 'tailwindcss';
+@import 'ngx-toastr/toastr';
+
+@theme {
+  
+
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Poppins', sans-serif;
+
+  
+  --color-dark-charcoal: #111827;
+  --color-light-charcoal: #1F2937;
+  --color-off-white: #E5E7EB;
+  
+  --color-aether-teal: #5eead4; 
+  --color-aether-blue: #38bdf8;
+  --color-aether-violet: #a78bfa; 
+  
+  --color-accent-gold: #facc15;
+  --color-success: #4ade80;
+  --color-danger: #f87171;
+
+  @keyframes gradient-pan {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/*
+  =======================================================
+  BASE LAYER
+  =======================================================
+*/
+@layer base {
+  body {
+    @apply bg-dark-charcoal text-off-white/90 font-sans;
+    background-attachment: fixed;
+    position: relative;
+  }
+
+  /* THE CORRECT "AETHER AURORA" BACKGROUND */
+  body::before {
+    content: '';
+    @apply absolute top-0 left-0 right-0 bottom-0 z-[-1];
+    background: radial-gradient(circle at 15% 50%, var(--color-aether-violet), transparent 40%),
+                radial-gradient(circle at 85% 40%, var(--color-aether-blue), transparent 40%),
+                radial-gradient(circle at 50% 90%, var(--color-aether-teal), transparent 40%);
+    background-color: var(--color-dark-charcoal);
+    opacity: 0.4; 
+    
+    
+    background-size: 300% 300%; 
+    animation: gradient-pan 45s ease infinite; 
+  }
+}
+
+/*
+  =======================================================
+  COMPONENTS LAYER
+  =======================================================
+*/
+@layer components {
+  /* Glassmorphism Card */
+  .glass-card {
+    @apply bg-light-charcoal/30 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl shadow-black/30;
+  }
+
+  /* Primary Gradient Button */
+  .gradient-button {
+    @apply px-6 py-3 rounded-lg border-2 border-transparent relative bg-light-charcoal;
+    @apply text-off-white font-display font-semibold tracking-wide;
+    @apply hover:scale-105 transition-transform duration-300 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100;
+    background-clip: padding-box;
+
+    &::before {
+      content: '';
+      @apply absolute inset-0 z-[-1] m-[-2px] rounded-[10px];
+      background: linear-gradient(to right, var(--color-aether-teal), var(--color-aether-blue), var(--color-aether-violet));
+    }
+  }
+
+  /* Standard Glass Button */
+  .glass-button {
+    @apply px-5 py-2.5 rounded-lg border border-white/20;
+    @apply bg-white/10 hover:bg-white/20 transition-all duration-300;
+    @apply text-off-white font-display font-semibold tracking-wide;
+  }
+
+  /* Form Input Styling */
+  .form-input {
+    @apply w-full bg-light-charcoal/50 border border-white/20 rounded-lg p-3;
+    @apply focus:outline-none focus:ring-2 focus:ring-aether-blue transition-all;
+    &.ng-invalid.ng-touched {
+      @apply border-danger ring-danger/50;
+    }
+  }
+
+  /* Form Label Styling */
+  .form-label {
+    @apply block mb-2 text-sm font-semibold text-off-white/80;
+  }
+
+  /* Form Error Message Styling */
+  .form-error {
+    @apply text-danger text-xs mt-1;
+  }
+
+  
+}
+
+/*
+  =======================================================
+  UTILITIES LAYER
+  =======================================================
+*/
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 2px solid transparent;
+  }
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+}
+
+/*
+  =======================================================
+  THIRD-PARTY OVERRIDES
+  =======================================================
+*/
+.toast-container .ngx-toastr {
+  @apply bg-light-charcoal/30 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl shadow-black/30 shadow-lg;
+  padding: 15px 20px !important;
+}
+.ngx-toastr.toast-success {
+  background-image: none !important;
+  background-color: theme(--color-success / 20%) !important;
+  border-left: 4px solid theme(--color-success) !important;
+}
+.ngx-toastr.toast-error {
+  background-image: none !important;
+  background-color: theme(--color-danger / 20%) !important;
+  border-left: 4px solid theme(--color-danger) !important;
+}
+.ngx-toastr.toast-info {
+  background-image: none !important;
+  background-color: theme(--color-aether-blue / 20%) !important;
+  border-left: 4px solid theme(--color-aether-blue) !important;
+}
+

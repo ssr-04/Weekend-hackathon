@@ -1,0 +1,74 @@
+<div class="min-h-screen flex items-center justify-center mt-10 px-4">
+  <div class="w-full max-w-lg animate-fade-in-up"> <!-- Increased max-width to lg -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="glass-card p-8 md:p-12">
+      <h2 class="text-4xl font-display font-bold text-center mb-2">Create Your Account</h2>
+      <p class="text-center text-off-white/70 mb-8">Begin your journey to financial clarity.</p>
+
+      <!-- API Error Display -->
+      <div *ngIf="authError$ | async as error" class="bg-danger/20 border border-danger/50 text-danger p-3 rounded-lg mb-6 text-center text-sm">
+        {{ error }}
+      </div>
+      
+      <!-- Name and Email Section -->
+      <div class="space-y-6 mb-6">
+        <div>
+          <label for="name" class="form-label">Full Name</label>
+          <input id="name" type="text" formControlName="name" class="form-input" [ngClass]="{'ng-invalid ng-touched': name?.invalid && name?.touched}">
+          <div *ngIf="name?.invalid && name?.touched" class="form-error">Name is required.</div>
+        </div>
+        <div>
+          <label for="email" class="form-label">Email Address</label>
+          <input id="email" type="email" formControlName="email" class="form-input" [ngClass]="{'ng-invalid ng-touched': email?.invalid && email?.touched}">
+           <div *ngIf="email?.invalid && email?.touched" class="form-error">A valid email is required.</div>
+        </div>
+      </div>
+
+      <!-- Password Section with Two Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-2">
+        <div>
+          <label for="password" class="form-label">Password</label>
+          <input id="password" type="password" formControlName="password" class="form-input" [ngClass]="{'ng-invalid ng-touched': password?.invalid && password?.touched}">
+          <div *ngIf="password?.invalid && password?.touched" class="form-error">
+            <span *ngIf="password?.errors?.['required']">Password is required.</span>
+            <span *ngIf="password?.errors?.['minlength']">Must be at least 8 characters.</span>
+          </div>
+        </div>
+        <div>
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input id="confirmPassword" type="password" formControlName="confirmPassword" class="form-input" [ngClass]="{'ng-invalid ng-touched': (confirmPassword?.invalid || registerForm.errors?.['passwordMismatch']) && confirmPassword?.touched}">
+           <div *ngIf="registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched" class="form-error">
+            Passwords do not match.
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Password Strength Indicator -->
+      <div *ngIf="password?.value" class="mb-8 h-6 flex items-center gap-2">
+        <div class="w-full bg-light-charcoal rounded-full h-1.5">
+          <div class="h-1.5 rounded-full transition-all duration-300"
+               [ngClass]="passwordStrength.color"
+               [style.width.%]="passwordStrength.score * 25">
+          </div>
+        </div>
+        <span class="text-xs font-semibold w-16 text-right" [ngClass]="{
+          'text-danger': passwordStrength.score <= 1,
+          'text-accent-gold': passwordStrength.score === 2,
+          'text-aether-blue': passwordStrength.score === 3,
+          'text-success': passwordStrength.score === 4
+        }">
+          {{ passwordStrength.text }}
+        </span>
+      </div>
+      <div *ngIf="!password?.value" class="mb-8 h-6"></div> <!-- Spacer to prevent layout shift -->
+
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="registerForm.invalid || isSubmitting()" class="w-full gradient-button text-lg py-3">
+        {{ isSubmitting() ? 'Creating Account...' : 'Create Account' }}
+      </button>
+
+      <p class="text-center text-off-white/60 mt-8 text-sm">
+        Already have an account? <a routerLink="/login" class="font-semibold text-aether-blue hover:underline">Log in</a>
+      </p>
+    </form>
+  </div>
+</div>

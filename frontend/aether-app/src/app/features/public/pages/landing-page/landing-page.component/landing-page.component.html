@@ -1,0 +1,55 @@
+<div class="w-full space-y-32 md:space-y-48 overflow-x-hidden">
+
+  <!-- Section 1: Hero -->
+  <section class="min-h-screen flex items-center justify-center text-center -mt-20">
+    <div class="container mx-auto px-6 animate-fade-in-up">
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-extrabold text-off-white leading-tight">
+        Financial Clarity,
+        <br>
+        <span class="bg-gradient-to-r from-aether-teal via-aether-blue to-aether-violet bg-clip-text text-transparent">
+          Effortlessly.
+        </span>
+      </h1>
+      <p class="mt-6 text-lg md:text-xl text-off-white/70 max-w-2xl mx-auto">
+        Aether is your intelligent financial co-pilot. Track expenses, visualize spending, and get AI-powered insights to master your money.
+      </p>
+      <div class="mt-10">
+        <a routerLink="/register" class="gradient-button text-lg px-8 py-4">Get Started for Free</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Features -->
+  <section class="container mx-auto px-6 space-y-24">
+    <app-landing-feature-card
+      title="Track Every Penny"
+      description="Log your expenses in seconds with our streamlined interface. On-the-fly category creation means you never lose track of where your money goes."
+      alignment="left">
+    </app-landing-feature-card>
+
+    <app-landing-feature-card
+      title="Visualize Your Spending"
+      description="Go beyond spreadsheets. Our interactive charts and graphs turn your data into clear, actionable insights, helping you understand your financial habits at a glance."
+      alignment="right">
+    </app-landing-feature-card>
+
+    <app-landing-feature-card
+      title="Gain AI-Powered Insights"
+      description="Aether's AI analyzes your spending to provide personalized summaries, identify trends, and offer suggestions to help you reach your financial goals faster."
+      alignment="left">
+    </app-landing-feature-card>
+  </section>
+
+  <!-- Section 3: Final Call to Action -->
+  <section class="py-24">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-4xl md:text-5xl font-display font-bold">Ready to Take Control?</h2>
+      <p class="mt-4 text-lg text-off-white/70">Your journey to financial clarity starts now.</p>
+      <div class="mt-8">
+        <a routerLink="/register" class="gradient-button text-xl px-12 py-4">
+          Sign Up - It's Free
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

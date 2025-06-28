@@ -1,0 +1,20 @@
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-[120px] lg:mb-[150px]">
+  <!-- Image/Visual Column -->
+  <div [ngClass]="{'md:order-last': alignment === 'right'}">
+    <!-- <div class="glass-card p-8 h-80 flex items-center justify-center">
+      <p class="text-off-white/30 text-2xl font-bold">[Engaging Visual Here]</p>
+    </div> -->
+
+    <div class="glass-card overflow-hidden">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPIRHkIbJrCcD6xt2_ZIkzjdgB8R_gJ-PHSQ&s"
+           [alt]="title + ' visual representation'" 
+           class="w-full h-auto object-cover">
+    </div>
+  </div>
+
+  <!-- Text Column -->
+  <div class="text-center md:text-left">
+    <h3 class="text-4xl font-display font-bold">{{ title }}</h3>
+    <p class="mt-4 text-lg text-off-white/70 leading-relaxed">{{ description }}</p>
+  </div>
+</div>

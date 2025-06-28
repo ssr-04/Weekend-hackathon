@@ -1,0 +1,43 @@
+<div class="min-h-screen flex items-center justify-center -mt-20 px-4">
+  <div class="w-full max-w-md animate-fade-in-up">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="glass-card p-8 md:p-12">
+      <h2 class="text-4xl font-display font-bold text-center mb-2">Welcome Back</h2>
+      <p class="text-center text-off-white/70 mb-8">Log in to continue your journey with Aether.</p>
+
+      <!-- API Error Display -->
+      <div *ngIf="authError$ | async as error" class="bg-danger/20 border border-danger/50 text-danger p-3 rounded-lg mb-6 text-center text-sm">
+        {{ error }}
+      </div>
+
+      <!-- Email Input -->
+      <div class="mb-6">
+        <label for="email" class="form-label">Email Address</label>
+        <input id="email" type="email" formControlName="email"
+               class="form-input" [ngClass]="{'ng-invalid ng-touched': email?.invalid && email?.touched}">
+        <div *ngIf="email?.invalid && email?.touched" class="form-error">
+          <span *ngIf="email?.errors?.['required']">Email is required.</span>
+          <span *ngIf="email?.errors?.['email']">Please enter a valid email address.</span>
+        </div>
+      </div>
+
+      <!-- Password Input -->
+      <div class="mb-8">
+        <label for="password" class="form-label">Password</label>
+        <input id="password" type="password" formControlName="password"
+               class="form-input" [ngClass]="{'ng-invalid ng-touched': password?.invalid && password?.touched}">
+        <div *ngIf="password?.invalid && password?.touched" class="form-error">
+          Password is required.
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="loginForm.invalid || isSubmitting()" class="w-full gradient-button text-lg py-3">
+        {{ isSubmitting() ? 'Logging in...' : 'Login' }}
+      </button>
+
+      <p class="text-center text-off-white/60 mt-8 text-sm">
+        Don't have an account? <a routerLink="/register" class="font-semibold text-aether-blue hover:underline">Sign up</a>
+      </p>
+    </form>
+  </div>
+</div>
