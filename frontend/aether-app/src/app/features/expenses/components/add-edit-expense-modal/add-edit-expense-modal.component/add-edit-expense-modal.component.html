@@ -1,0 +1,37 @@
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center animate-fade-in-up" (click)="modalService.close()">
+  <div class="glass-card w-full max-w-lg m-4" (click)="$event.stopPropagation()">
+    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" class="p-8">
+      <h2 class="text-3xl font-display font-bold mb-6">{{ isEditMode() ? 'Edit' : 'Add New' }} Expense</h2>
+      <div class="space-y-6">
+        <div>
+          <label for="title" class="form-label">Title</label>
+          <input id="title" type="text" formControlName="title" placeholder="e.g., Weekly Groceries" class="form-input">
+        </div>
+        <div class="grid grid-cols-2 gap-6">
+          <div>
+            <label for="amount" class="form-label">Amount (USD)</label>
+            <input id="amount" type="number" formControlName="amount" placeholder="e.g., 75.50" class="form-input">
+          </div>
+          <div>
+            <label for="date" class="form-label">Date</label>
+            <input id="date" type="date" formControlName="date" class="form-input">
+          </div>
+        </div>
+        <div>
+          <label for="categoryName" class="form-label">Category</label>
+          <app-category-select-input formControlName="categoryName"></app-category-select-input>
+        </div>
+        <div>
+          <label for="description" class="form-label">Description (Optional)</label>
+          <textarea id="description" formControlName="description" rows="3" class="form-input"></textarea>
+        </div>
+      </div>
+       <div class="flex justify-end items-center gap-4 mt-8 pt-6 border-t border-white/10">
+        <button type="button" (click)="modalService.close()" class="glass-button">Cancel</button>
+        <button type="submit" [disabled]="expenseForm.invalid || isSubmitting()" class="gradient-button">
+          {{ isSubmitting() ? 'Saving...' : (isEditMode() ? 'Save Changes' : 'Add Expense') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -42,7 +42,7 @@
   <!-- MAIN CONTENT GRID: Charts & AI -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Left Column: Main Chart -->
-    <div class="lg:col-span-2">
+    <div class="lg:col-span-1 min-h-[500px]">
       <app-chart-card title="Expense Breakdown by Category" [isLoading]="dataService.isLoading()" cardHeightClass="h-96">
         <ngx-charts-pie-chart
           *ngIf="!dataService.isLoading() && dataService.categoryChartData().length > 0"
@@ -53,8 +53,10 @@
           [legendPosition]="legendPosition"
           [doughnut]="true"
           [arcWidth]="0.5"
-          [labels]="false">
-        </ngx-charts-pie-chart>
+          [labels]="false"
+          [view]="[300,350]"
+        ></ngx-charts-pie-chart>
+        
         <div *ngIf="!dataService.isLoading() && dataService.categoryChartData().length === 0" 
              class="flex items-center justify-center h-full text-off-white/60">
           No expense data for this period.

@@ -1,20 +1,32 @@
-import { Component, OnInit, forwardRef, inject, signal } from '@angular/core';
+import { Component, OnInit, forwardRef, inject, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+// CORRECTED: Import NG_VALUE_ACCESSOR to use in the provider
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
+
+import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Category } from '../../../../core/models/category.model';
 import { CategoryService } from '../../../../core/services/category.service';
 
-
 @Component({
-  selector: 'app-category-select-input.component.ts',
+  selector: 'app-category-select-input',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './category-select-input.component.ts.html',
-  styleUrl: './category-select-input.component.ts.css'
+  styleUrls: [],
+  // --- THE FIX ---
+  // This providers array correctly registers the component as a ControlValueAccessor,
+  // allowing it to work with formControlName.
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CategorySelectInputComponent),
+      multi: true
+    }
+  ]
+  // ---------------
 })
-
-export class CategorySelectInputComponent implements OnInit, ControlValueAccessor {
+export class CategorySelectInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   private categoryService = inject(CategoryService);
 
   allCategories = signal<Category[]>([]);
@@ -24,13 +36,13 @@ export class CategorySelectInputComponent implements OnInit, ControlValueAccesso
   isDropdownOpen = signal(false);
   
   private searchSubject = new Subject<string>();
+  private searchSubscription!: Subscription;
   
   // CVA methods
   onChange: any = () => {};
   onTouched: any = () => {};
 
   writeValue(value: string): void {
-    // This component's value is the category name string
     this.selectedCategoryName.set(value || '');
   }
   registerOnChange(fn: any): void { this.onChange = fn; }
@@ -42,7 +54,7 @@ export class CategorySelectInputComponent implements OnInit, ControlValueAccesso
       this.filteredCategories.set(categories);
     });
 
-    this.searchSubject.pipe(
+    this.searchSubscription = this.searchSubject.pipe(
       debounceTime(200),
       distinctUntilChanged()
     ).subscribe(searchValue => {
@@ -50,10 +62,17 @@ export class CategorySelectInputComponent implements OnInit, ControlValueAccesso
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+  }
+
   onSearch(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    this.selectedCategoryName.set(value); // Update the search term
-    this.onChange(value); // Immediately update the form control value
+    this.selectedCategoryName.set(value);
+    this.onChange(value);
+    this.onTouched(); // Mark as touched on input
     this.searchSubject.next(value);
     this.isDropdownOpen.set(true);
   }
@@ -72,13 +91,13 @@ export class CategorySelectInputComponent implements OnInit, ControlValueAccesso
   selectCategory(categoryName: string): void {
     this.selectedCategoryName.set(categoryName);
     this.onChange(categoryName);
+    this.onTouched();
     this.isDropdownOpen.set(false);
   }
 
   get showCreateOption(): boolean {
     const searchTerm = this.selectedCategoryName();
     if (!searchTerm) return false;
-    // Show create option if the search term doesn't exactly match any existing category name
     return !this.allCategories().some(cat => cat.name.toLowerCase() === searchTerm.toLowerCase());
   }
 }

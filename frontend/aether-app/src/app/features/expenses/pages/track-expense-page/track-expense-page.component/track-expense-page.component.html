@@ -1,0 +1,34 @@
+<div class="animate-fade-in-up space-y-8">
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+    <div>
+      <h1 class="text-4xl font-display font-bold">Track Expense</h1>
+      <p class="text-off-white/70 mt-1">Log your spending for {{ currentDate | date:'fullDate' }}</p>
+    </div>
+    <button (click)="openAddModal()" class="gradient-button flex-shrink-0 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+      <span>Add New Expense</span>
+    </button>
+  </div>
+
+  <!-- Expenses List -->
+  <div *ngIf="!isLoading(); else loading" class="space-y-4">
+    <app-expense-list-item *ngFor="let expense of todaysExpenses(); " 
+                           [expense]="expense"
+                           (edit)="onEditExpense($event)"
+                           (delete)="onDeleteExpense($event)">
+    </app-expense-list-item>
+
+    <div *ngIf="todaysExpenses().length === 0" class="glass-card text-center p-12">
+      <h3 class="text-xl font-bold">No expenses logged for today.</h3>
+      <p class="text-off-white/70 mt-2">Click the button above to add your first one!</p>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="space-y-4">
+      <!-- Skeleton Loader for list items -->
+      <div *ngFor="let i of [1,2,3]" class="glass-card p-4 h-20 animate-pulse"></div>
+    </div>
+  </ng-template>
+</div>

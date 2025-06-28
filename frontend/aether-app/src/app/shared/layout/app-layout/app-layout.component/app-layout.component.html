@@ -1,8 +1,23 @@
 <div class="flex">
-      <app-sidebar></app-sidebar>
-      
-      <!-- Main content area with padding to offset the fixed sidebar -->
-      <main class="flex-grow ml-64 p-8 custom-scrollbar h-screen overflow-y-auto">
-        <router-outlet></router-outlet>
-      </main>
-    </div>
+  <app-sidebar></app-sidebar>
+
+  <!-- Main content area with padding to offset the fixed sidebar -->
+  <main class="flex-grow ml-64 p-8 custom-scrollbar h-screen overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+@if(modalService.isModalOpen$()){
+  @switch (modalService.modalData$()?.type) {
+
+    @case ('addEditExpense') { 
+      <!-- This will render the Add/Edit Expense modal when its type is set -->
+      <app-add-edit-expense-modal></app-add-edit-expense-modal> 
+    }
+
+    <!-- A default case is good practice for debugging -->
+    @default {
+      <!-- This could render a generic error modal if an unknown type is passed -->
+    }
+  }
+}

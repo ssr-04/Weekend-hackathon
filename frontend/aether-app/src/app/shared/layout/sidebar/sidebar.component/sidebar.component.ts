@@ -21,9 +21,9 @@ export class SidebarComponent {
 
   navLinks = [
     { path: '/dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
-    { path: '/track', label: 'Track Expense', icon: 'plus-circle' },
-    { path: '/expenses', label: 'View Expenses', icon: 'list' },
-    { path: '/ai-insights', label: 'AI Insights', icon: 'sparkles' },
-    { path: '/settings', label: 'Settings', icon: 'settings' },
+    { path: '/dashboard/track', label: 'Track Expense', icon: 'plus-circle' },
+    { path: '/dashboard/expenses', label: 'View Expenses', icon: 'list' },
+    { path: '/dashboard/ai-insights', label: 'AI Insights', icon: 'sparkles' },
+    { path: '/dashboard/settings', label: 'Settings', icon: 'settings' },
   ];
 }

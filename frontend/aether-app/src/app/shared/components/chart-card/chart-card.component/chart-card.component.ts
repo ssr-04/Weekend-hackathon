@@ -11,5 +11,5 @@ export class ChartCardComponent {
   @Input() title: string = 'Chart';
   @Input() isLoading: boolean = false;
   // Allows us to set a specific height for skeleton loading to prevent layout shifts
-  @Input() cardHeightClass: string = 'h-80'; 
+  @Input() cardHeightClass: string = 'h-98'; 
 }

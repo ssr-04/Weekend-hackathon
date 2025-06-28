@@ -42,7 +42,12 @@ export const routes: Routes = [
         path: '', // The default route for '/dashboard'
         title: 'Aether - Dashboard',
         loadComponent: () => import('./features/dashboard/pages/dashboard-page/dashboard-page.component/dashboard-page.component').then(m => m.DashboardPageComponent) 
-      }
+      },
+      {
+      path: 'track',
+      title: 'Aether - Track Expense',
+      loadComponent: () => import('./features/expenses/pages/track-expense-page/track-expense-page.component/track-expense-page.component').then(m => m.TrackExpensePageComponent)
+    },
     ]
   },
 

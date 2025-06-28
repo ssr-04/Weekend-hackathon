@@ -1,5 +1,5 @@
 <div class="glass-card p-6" [class]="cardHeightClass">
-  <h3 class="text-lg font-display font-bold text-off-white/90 mb-4">{{ title }}</h3>
+  <h3 class="text-lg font-display font-bold text-off-white/90 ">{{ title }}</h3>
   
   <!-- Content Area -->
   <div class="h-full">
@@ -7,7 +7,7 @@
     <div *ngIf="isLoading" class="w-full h-5/6 bg-white/5 rounded-lg animate-pulse"></div>
     
     <!-- Real Content (Projected from parent) -->
-    <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="!isLoading" class="mb-10">
       <ng-content></ng-content>
     </ng-container>
   </div>

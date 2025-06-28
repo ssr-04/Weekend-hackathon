@@ -1,0 +1,27 @@
+<div @fadeInOut class="glass-card p-4 flex items-center gap-4">
+  <!-- Category Icon Placeholder -->
+  <div class="w-12 h-12 rounded-lg bg-light-charcoal flex-shrink-0 flex items-center justify-center">
+    <span class="text-2xl">💰</span>
+  </div>
+  
+  <!-- Title and Time -->
+  <div class="flex-grow">
+    <p class="font-bold text-off-white">{{ expense.title }}</p>
+    <p class="text-xs text-off-white/60">{{ expense.date | date:'shortTime' }} • {{ expense.categoryName }}</p>
+  </div>
+  
+  <!-- Amount -->
+  <div class="font-bold text-lg text-danger flex-shrink-0">
+    - {{ expense.amount | currency:'USD' }}
+  </div>
+  
+  <!-- Actions -->
+  <div class="flex items-center gap-2 flex-shrink-0">
+    <button (click)="onEdit()" class="glass-button !p-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+    </button>
+    <button (click)="onDelete()" class="glass-button !p-2 hover:bg-danger/20 hover:text-danger">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    </button>
+  </div>
+</div>

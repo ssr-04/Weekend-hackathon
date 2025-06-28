@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { DateFormatHelper } from '../../../../core/helpers/date-format.helper';
@@ -10,7 +10,9 @@ import { DateFormatHelper } from '../../../../core/helpers/date-format.helper';
   styleUrl: './date-range-picker.component.css'
 })
 
-export class DateRangePickerComponent {
+export class DateRangePickerComponent implements OnInit{
+
+  
   @Output() rangeSelected = new EventEmitter<{ startDate?: string; endDate?: string }>();
 
   rangeForm = new FormBuilder().group({
@@ -35,6 +37,10 @@ export class DateRangePickerComponent {
 
     this.rangeForm.patchValue({ startDate: '', endDate: '' }); // Clear manual inputs
     this.rangeSelected.emit({ startDate: formattedStart, endDate: formattedEnd });
+  }
+
+  ngOnInit(): void {
+    this.setPreset('today');
   }
 
   applyManualRange(): void {
