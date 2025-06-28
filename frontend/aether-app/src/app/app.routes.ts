@@ -47,7 +47,12 @@ export const routes: Routes = [
       path: 'track',
       title: 'Aether - Track Expense',
       loadComponent: () => import('./features/expenses/pages/track-expense-page/track-expense-page.component/track-expense-page.component').then(m => m.TrackExpensePageComponent)
-    },
+      },
+      {
+        path: 'expenses',
+        title: 'Aether - All Expenses',
+        loadComponent: () => import('./features/expenses/pages/all-expenses-page/all-expenses-page.component/all-expenses-page.component').then(m => m.AllExpensesPageComponent)
+      },
     ]
   },
 

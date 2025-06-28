@@ -1,0 +1,70 @@
+<div class="animate-fade-in-up space-y-8">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-4xl font-display font-bold">All Expenses</h1>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="glass-card p-4">
+    <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+      <!-- Search Input -->
+      <div class="lg:col-span-2">
+        <label class="form-label">Search</label>
+        <input type="text" formControlName="SearchTerm" placeholder="Search by title or description..." class="form-input">
+      </div>
+      <!-- Date Inputs -->
+      <div>
+        <label class="form-label">Start Date</label>
+        <input type="date" formControlName="StartDate" class="form-input">
+      </div>
+       <div>
+        <label class="form-label">End Date</label>
+        <input type="date" formControlName="EndDate" class="form-input">
+      </div>
+       <!-- Category Filter -->
+      <div class="lg:col-span-2">
+        <label class="form-label">Categories</label>
+        <app-category-multi-select formControlName="CategoryNames"></app-category-multi-select>
+      </div>
+       <!-- Payment Method -->
+       <div>
+        <label class="form-label">Payment Method</label>
+        <input type="text" formControlName="PaymentMethod" placeholder="e.g., Cash" class="form-input">
+      </div>
+      <!-- Sort Control -->
+      <div>
+        <label class="form-label">Sort By</label>
+        <app-sort-control [options]="sortOptions" (sortChanged)="onSortChanged($event)"></app-sort-control>
+      </div>
+    </form>
+  </div>
+
+  <!-- Expenses List -->
+  <div class="space-y-6">
+    <div *ngFor="let group of groupedExpenses()" class="space-y-4">
+      <!-- Date Header -->
+      <h3 class="text-xl font-display font-bold border-b-2 border-white/10 pb-2">
+        {{ group.date | date:'fullDate' }}
+      </h3>
+      <!-- Expense Items -->
+      <app-expense-list-item *ngFor="let expense of group.expenses;" 
+                             [expense]="expense"
+                             (edit)="onEditExpense(expense)">
+      </app-expense-list-item>
+    </div>
+    
+    <!-- Loading & Empty States -->
+    <div *ngIf="isLoading()" class="text-center p-10">
+      <div class="w-8 h-8 border-4 border-white/50 border-t-white rounded-full animate-spin mx-auto"></div>
+    </div>
+    <div *ngIf="!isLoading() && allExpenses.length === 0" class="glass-card text-center p-12">
+      <h3 class="text-xl font-bold">No Expenses Found</h3>
+      <p class="text-off-white/70 mt-2">Try adjusting your filters or adding a new expense.</p>
+    </div>
+
+    <!-- Load More Button -->
+    <div *ngIf="!isLoading() && currentPage < totalPages" class="text-center mt-8">
+      <button (click)="loadMore()" class="gradient-button">Load More Expenses</button>
+    </div>
+  </div>
+</div>

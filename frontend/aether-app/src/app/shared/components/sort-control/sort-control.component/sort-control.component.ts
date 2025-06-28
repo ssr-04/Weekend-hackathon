@@ -9,7 +9,7 @@ export type SortOrder = 'Asc' | 'Desc';
 
 
 @Component({
-  selector: 'app-sort-control.component',
+  selector: 'app-sort-control',
   imports: [CommonModule],
   templateUrl: './sort-control.component.html',
   styleUrl: './sort-control.component.css'

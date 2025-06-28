@@ -1,0 +1,32 @@
+<div class="relative z-50">
+  <!-- The main input-like display area -->
+  <div class="form-input flex flex-wrap gap-2 items-center min-h-[48px] cursor-pointer" (click)="toggleDropdown()">
+    <ng-container *ngIf="selectedCategories.length > 0; else placeholder">
+      <span *ngFor="let category of selectedCategories" class="category-tag">
+        {{ category.name }}
+        <button type="button" (click)="removeCategory(category, $event)" class="ml-1.5 font-bold text-off-white/70 hover:text-white">
+          ×
+        </button>
+      </span>
+    </ng-container>
+    <ng-template #placeholder>
+      <span class="text-off-white/50">Select categories...</span>
+    </ng-template>
+  </div>
+
+  <!-- The Dropdown List -->
+  <div *ngIf="isDropdownOpen"
+       class="absolute top-full left-0 right-0 z-50 mt-2 glass-card p-2 max-h-60 overflow-y-auto custom-scrollbar">
+    <ul class="space-y-1">
+      <li *ngFor="let category of allCategories"
+          (click)="toggleCategory(category)"
+          class="dropdown-item"
+          [class.selected]="isSelected(category)">
+        {{ category.name }}
+        <span *ngIf="isSelected(category)" class="ml-auto text-aether-blue">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
