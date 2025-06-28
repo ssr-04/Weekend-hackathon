@@ -11,6 +11,7 @@ import { provideEffects } from '@ngrx/effects';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
 import { AuthEffects } from './core/store/auth/auth.effects';
 import { authFeatureKey, authReducer } from './core/store/auth/auth.reducer';
+import { DashboardDataService } from './features/dashboard/dashboard-data.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideStore(),
     provideState(authFeatureKey, authReducer),
     provideEffects([AuthEffects]),
-    
+    DashboardDataService,
 
   ]
 };

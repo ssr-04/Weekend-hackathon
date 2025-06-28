@@ -1,0 +1,79 @@
+<div class="animate-fade-in-up space-y-8">
+  
+  <!-- HEADER SECTION: Title and Filters -->
+  <div class="flex flex-col md:items-center gap-10 justify-between">
+    <h1 class="text-4xl font-display font-bold">My Dashboard</h1>
+    <div class="md:w-auto">
+      <app-date-range-picker (rangeSelected)="onDateRangeSelected($event)"></app-date-range-picker>
+    </div>
+  </div>
+
+  <!-- STATS CARDS ROW -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <app-stat-card 
+      label="Total Expenses" 
+      [value]="(dataService.totalExpenses()?.totalAmount || 0) | currency:'USD'"
+      [subtext]="dataService.totalExpenses()?.period"
+      [isLoading]="dataService.isLoading()">
+    </app-stat-card>
+    
+    <app-stat-card
+      [label]="'Highest Expense'"
+      [value]="(dataService.highestExpense()?.amount || 0) | currency:'USD'"
+      [subtext]="dataService.highestExpense()?.title"
+      [isLoading]="dataService.isLoading()">
+    </app-stat-card>
+    
+    <app-stat-card
+      label="vs Previous Month"
+      [value]="(dataService.monthlyComparison()?.percentageChange || 0).toFixed(1) + '%'"
+      [subtext]="(dataService.monthlyComparison()?.difference || 0) > 0 ? 'More spending' : 'Less spending'"
+      [isLoading]="dataService.isLoading()">
+    </app-stat-card>
+
+    <app-stat-card 
+      label="Your Income" 
+      [value]="(userProfile?.monthlyIncome || 0) | currency:'USD':'symbol':'1.0-0'" 
+      subtext="Monthly Estimate" 
+      [isLoading]="!userProfile"> <!-- Loading state until profile is fetched -->
+    </app-stat-card>
+  </div>
+
+  <!-- MAIN CONTENT GRID: Charts & AI -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Left Column: Main Chart -->
+    <div class="lg:col-span-2">
+      <app-chart-card title="Expense Breakdown by Category" [isLoading]="dataService.isLoading()" cardHeightClass="h-96">
+        <ngx-charts-pie-chart
+          *ngIf="!dataService.isLoading() && dataService.categoryChartData().length > 0"
+          [results]="dataService.categoryChartData()"
+          [scheme]="chartColorSchema"
+          [gradient]="true"
+          [legend]="true"
+          [legendPosition]="legendPosition"
+          [doughnut]="true"
+          [arcWidth]="0.5"
+          [labels]="false">
+        </ngx-charts-pie-chart>
+        <div *ngIf="!dataService.isLoading() && dataService.categoryChartData().length === 0" 
+             class="flex items-center justify-center h-full text-off-white/60">
+          No expense data for this period.
+        </div>
+      </app-chart-card>
+    </div>
+
+    <!-- Right Column: AI Insight -->
+    <div class="lg:col-span-1">
+      <app-chart-card title="AI Financial Insight" [isLoading]="dataService.isLoading()" cardHeightClass="h-96">
+        <div class="flex flex-col items-center justify-center h-full text-center p-4 space-y-4">
+          <div class="w-16 h-16 rounded-full bg-accent-gold/20 flex items-center justify-center">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-accent-gold"><path d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9Z"/></svg>
+          </div>
+          <p class="text-off-white/80 leading-relaxed">
+            AI-powered summaries of your spending habits will appear here.
+          </p>
+        </div>
+      </app-chart-card>
+    </div>
+  </div>
+</div>

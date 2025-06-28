@@ -1,0 +1,66 @@
+<div class="min-h-screen flex items-center justify-center -mt-10 px-4">
+  <div class="w-full max-w-2xl animate-fade-in-up">
+    <div class="glass-card p-8 md:p-12">
+      <!-- Progress Bar -->
+      <div class="mb-8">
+        <h3 class="text-lg font-semibold text-center text-off-white/80">Step {{ currentStep() }} of 2</h3>
+        <div class="mt-2 w-full bg-light-charcoal rounded-full h-2.5">
+          <div class="bg-gradient-to-r from-aether-teal to-aether-blue h-2.5 rounded-full transition-all duration-500" [style.width.%]="currentStep() * 50"></div>
+        </div>
+      </div>
+
+      <form [formGroup]="onboardingForm" (ngSubmit)="onSubmit()">
+        <!-- Wizard Content -->
+        @switch (currentStep()) {
+          @case (1) {
+            <!-- Step 1: Financial Profile -->
+            <div class="animate-fade-in-up text-center">
+              <h2 class="text-3xl font-display font-bold">Your Financial Profile</h2>
+              <p class="text-off-white/70 mt-2 mb-6">This required information helps power your personalized AI insights and budgeting tools.</p>
+              <div class="max-w-sm mx-auto">
+                <label for="monthlyIncome" class="form-label text-left">Your Estimated Monthly Income (USD)</label>
+                <input id="monthlyIncome" type="number" formControlName="monthlyIncome" placeholder="e.g., 5000" class="form-input text-center text-lg">
+                 <div *ngIf="onboardingForm.get('monthlyIncome')?.invalid && onboardingForm.get('monthlyIncome')?.touched" class="form-error text-left">
+                    A valid monthly income is required.
+                </div>
+              </div>
+            </div>
+          }
+          @case (2) {
+            <!-- Step 2: Optional Context -->
+            <div class="animate-fade-in-up text-center">
+              <h2 class="text-3xl font-display font-bold">Add More Context (Optional)</h2>
+              <p class="text-off-white/70 mt-2 mb-6">This optional data helps us tailor your experience even further.</p>
+              <div class="space-y-6 max-w-lg mx-auto text-left">
+                <div>
+                  <label for="numberOfDependents" class="form-label">Number of Dependents</label>
+                  <input id="numberOfDependents" type="number" formControlName="numberOfDependents" placeholder="e.g., 2" class="form-input">
+                </div>
+                <div>
+                  <label for="financialGoals" class="form-label">What are your financial goals?</label>
+                  <textarea id="financialGoals" formControlName="financialGoals" rows="4" placeholder="e.g., Save for a down payment, pay off student loans..." class="form-input"></textarea>
+                </div>
+              </div>
+            </div>
+          }
+        }
+
+        <!-- Navigation Buttons -->
+        <div class="mt-10 pt-6 border-t border-white/10 flex justify-between items-center">
+          <button type="button" *ngIf="currentStep() > 1" (click)="prevStep()" class="glass-button">
+            Back
+          </button>
+          <!-- Spacer to keep right button in place -->
+          <div *ngIf="currentStep() === 1"></div> 
+
+          <button type="button" *ngIf="currentStep() < 2" (click)="nextStep()" class="gradient-button">
+            Next Step
+          </button>
+          <button type="submit" *ngIf="currentStep() === 2" [disabled]="onboardingForm.get('monthlyIncome')?.invalid || isSubmitting()" class="gradient-button">
+            {{ isSubmitting() ? 'Saving...' : 'Finish Setup' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+</div>

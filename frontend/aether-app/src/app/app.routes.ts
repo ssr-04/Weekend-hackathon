@@ -3,6 +3,7 @@ import { PublicLayoutComponent } from './shared/layout/public-layout/public-layo
 import { LandingPageComponent } from './features/public/pages/landing-page/landing-page.component/landing-page.component';
 import { AppLayoutComponent } from './shared/layout/app-layout/app-layout.component/app-layout.component';
 import { authGuard } from './core/guards/auth.guard';
+import { onboardingGuard } from './core/guards/onboarding.guard';
 
 export const routes: Routes = [
   {
@@ -25,14 +26,23 @@ export const routes: Routes = [
     ]
   },
 
+  {
+    path: 'onboarding',
+    canActivate: [authGuard], // Must be logged in to access onboarding
+    loadComponent: () => import('./features/onboarding/pages/onboarding-page/onboarding-page.component/onboarding-page.component').then(m => m.OnboardingPageComponent)
+  },
+
   // Authenticated Routes
   {
-    path: 'dashboard', // This is a simple route for now, will be expanded
+    path: 'dashboard',
     component: AppLayoutComponent,
-    canActivate: [authGuard], // This will protect the route
+    canActivate: [authGuard, onboardingGuard],
     children: [
-      // // For now, we can just load a placeholder dashboard component
-      // { path: '', loadComponent: () => import('./features/dashboard/pages/dashboard-page/dashboard-page').then(m => m.DashboardPageComponent) }
+      { 
+        path: '', // The default route for '/dashboard'
+        title: 'Aether - Dashboard',
+        loadComponent: () => import('./features/dashboard/pages/dashboard-page/dashboard-page.component/dashboard-page.component').then(m => m.DashboardPageComponent) 
+      }
     ]
   },
 

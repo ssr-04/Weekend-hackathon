@@ -1,0 +1,12 @@
+<div class="glass-card p-4">
+  <div class="flex items-center gap-2 mb-2">
+    <button (click)="setPreset('today')" class="glass-button flex-grow text-xs">Today</button>
+    <button (click)="setPreset('this_week')" class="glass-button flex-grow text-xs">This Week</button>
+    <button (click)="setPreset('this_month')" class="glass-button flex-grow text-xs">This Month</button>
+  </div>
+  <form [formGroup]="rangeForm" (ngSubmit)="applyManualRange()" class="grid grid-cols-2 gap-2">
+    <input type="date" formControlName="startDate" class="form-input text-sm">
+    <input type="date" formControlName="endDate" class="form-input text-sm">
+    <button type="submit" class="gradient-button col-span-2 text-sm py-2">Apply Range</button>
+  </form>
+</div>

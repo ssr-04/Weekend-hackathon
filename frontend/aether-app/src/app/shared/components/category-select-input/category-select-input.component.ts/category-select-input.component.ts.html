@@ -1,0 +1,30 @@
+<div class="relative">
+  <input type="text"
+         class="form-input"
+         placeholder="Search or create a category..."
+         [value]="selectedCategoryName()"
+         (input)="onSearch($event)"
+         (focus)="isDropdownOpen.set(true)"
+         (blur)="isDropdownOpen.set(false)">
+
+  <!-- Dropdown Panel -->
+  <div *ngIf="isDropdownOpen()"
+       class="absolute top-full left-0 right-0 z-10 mt-2 glass-card p-2 max-h-60 overflow-y-auto custom-scrollbar">
+    
+    <!-- "Create New" Option -->
+    <div *ngIf="showCreateOption" 
+         (mousedown)="selectCategory(selectedCategoryName())"
+         class="px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer transition-colors text-aether-teal font-semibold">
+      + Create new category: "{{ selectedCategoryName() }}"
+    </div>
+
+    <!-- Filtered List -->
+    <ul class="space-y-1">
+      <li *ngFor="let category of filteredCategories()"
+          (mousedown)="selectCategory(category.name)"
+          class="px-3 py-2 rounded-md hover:bg-white/10 cursor-pointer transition-colors">
+        {{ category.name }}
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="glass-card p-6">
+  <!-- Loading State: Show skeleton loaders -->
+  <ng-container *ngIf="isLoading; else loaded">
+    <div class="space-y-3 animate-pulse">
+      <div class="h-4 bg-white/10 rounded w-3/4"></div>
+      <div class="h-8 bg-white/10 rounded w-1/2"></div>
+      <div class="h-3 bg-white/10 rounded w-2/3"></div>
+    </div>
+  </ng-container>
+  
+  <!-- Loaded State: Show the actual data -->
+  <ng-template #loaded>
+    <div>
+      <p class="text-sm font-semibold text-off-white/70 truncate" [title]="label">
+        {{ label }}
+      </p>
+      <p class="text-4xl font-display font-bold text-off-white mt-2">
+        {{ value }}
+      </p>
+      <p *ngIf="subtext" class="text-sm text-off-white/60 mt-1 truncate" [title]="subtext">
+        {{ subtext }}
+      </p>
+    </div>
+  </ng-template>
+</div>
